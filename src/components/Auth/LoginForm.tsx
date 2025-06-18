@@ -23,9 +23,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleMode }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>();
+  } = useForm<LoginFormData>({
+    mode: 'onChange',
+  });
 
   const onSubmit = async (data: LoginFormData) => {
+    // Validate student email format
+    if (!data.email.toLowerCase().endsWith('@kkwagh.edu.in') && data.email.toLowerCase() !== 'admin@kkwagh.edu.in') {
+      toast.error('Invalid email format. Student emails must end with @kkwagh.edu.in');
+      return;
+    }
     setIsLoading(true);
     try {
       const success = await login(data.email, data.password);
